@@ -77,7 +77,15 @@ class SiteController extends Controller
             ->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
-        print_r(Yii::$app->request->get('id'));die;
+        $transaction = Yii::$app->db->beginTransaction();
+        try{
+            $transaction->commit();
+        }catch (\Exception $e){
+            $transaction->rollBack();
+        }
+        print_r(Yii::$app->params['adminEmail']);die;
+//        print_r(Yii::$app->db->createCommand('select * from user')->queryAll());die;
+//        print_r(Yii::$app->request->get('id'));die;
         print_r(( new \yii\db\Query)->select('u.id')->from('user u')->join('left join','zs_application a','a.uid=u.id')->createCommand()->sql);die;
         return $this->render('index');
     }
