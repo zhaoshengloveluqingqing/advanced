@@ -8,7 +8,8 @@ use yii\filters\AccessControl;
 use common\models\LoginForm;
 use common\models\User;
 use backend\service\TestService;
-
+use common\help\tools;
+use yii\data\pagination;
 /**
  * Site controller
  */
@@ -65,7 +66,19 @@ class SiteController extends Controller
         //\common\help\tools::uuid();
         $rr = TestService::getUserInfo();
         $rr= \common\models\User::test();
-        print_r(Yii::$app->params['adminEmail']);die;
+        $query = User::find();
+
+        $pagination = new Pagination([
+            'defaultPageSize' => 51,
+            'totalCount' => $query->count(),
+        ]);
+
+        $list = $query->orderBy('id')
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+        print_r(Yii::$app->request->get('id'));die;
+        print_r(( new \yii\db\Query)->select('u.id')->from('user u')->join('left join','zs_application a','a.uid=u.id')->createCommand()->sql);die;
         return $this->render('index');
     }
 

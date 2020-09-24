@@ -10,4 +10,9 @@ return [
             'class' => 'yii\caching\FileCache',
         ],
     ],
+    'modules' => [
+        'order' => [
+            'class' => 'backend\modules\order\module',
+        ],
+    ],
 ];
